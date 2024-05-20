@@ -40,6 +40,8 @@ const Home = () => {
     }
 
     const handleQuiz = (event)=>{
+        setNextq(0)
+        setPoprawneOdp(0)
         event.preventDefault();
         axios.post('http://localhost:8082/getquiz')
         .then(res=>{
