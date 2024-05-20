@@ -57,9 +57,10 @@ app.post('/login',(req,res)=>{
             bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
                 if(err) return res.json({Error:"Password compare error"});
                 if(response){
-                    
+                    console.log(data[0])
                     const name=data[0].name
-                    const token=jwt.sign({name},"jwt-secret-key",{expiresIn:'1d'});
+                    const id=data[0].LoginID
+                    const token=jwt.sign({payload: { name: name, id: id}},"jwt-secret-key",{expiresIn:'1d'});
                     res.cookie('token',token);
                     return res.json({Status:"Success"});
                 }
@@ -89,24 +90,17 @@ app.post('/getquiz',(req,res)=>{
             return res.json({Error:"Nie ma żadnych pytań"});
         }
         
+})
+
+app.post('/sendscore',(req,res)=>{
+    const sql="INSERT INTO scoreboard (`id_login`,`wynik`) VALUES (?,?)";
+    db.query(sql,[req.body.id,req.body.poprawneOdp],(err,data)=>{
+        if(err) return res.json({Error:"Inserting data Error in server"});
+
+        return res.json({Status:"Success"});
     })
-    // db.query(sql,(err,data)=>{
-    //     if(err) return res.json({Error:"Nie pobrano danych"});
-    //     if(data.length>0){
-    //             if(response){
-                    
-    //                 const name=data[0].name
-    //                 const token=jwt.sign({name},"jwt-secret-key",{expiresIn:'1d'});
-    //                 res.cookie('token',token);
-    //                 return res.json(data);
-    //             }
-    //             else{
-    //                 return res.json({Error:"Coś poszło nie tak..."})
-    //             }
-    //     } else{
-    //         return res.json({Error:"Nie ma żadnych pytań"});
-    //     }
-    // })
+        
+})
 })
 
 
@@ -119,7 +113,8 @@ const verifyUser=(req,res,next)=>{
             if(err){
                 return res.json({Error: "Token is not okey!"});
             } else{
-                req.name=decoded.name;
+                req.id=decoded.payload.id;
+                req.name=decoded.payload.name;
                 next();
             }
         })
@@ -127,7 +122,7 @@ const verifyUser=(req,res,next)=>{
 }
 
 app.get('/',verifyUser,(req,res)=>{
-    return res.json({Status:"Success",name:req.name})
+    return res.json({Status:"Success",name:req.name,id:req.id})
 })
 
 app.get('/logout',(req,res)=>{

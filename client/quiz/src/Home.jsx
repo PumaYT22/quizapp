@@ -12,6 +12,7 @@ const Home = () => {
     const [poprawneOdp,setPoprawneOdp]=useState(0)
     const [nextq,setNextq]=useState(0)
     const [name,setName]=useState('')
+    const [id,setId]=useState(null)
 
     axios.defaults.withCredentials=true;
     useEffect(() => {
@@ -20,14 +21,14 @@ const Home = () => {
             if(res.data.Status==="Success"){
                 setAuth(true)
                 setName(res.data.name)
-               
+                setId(res.data.id)
             } else{
                 setAuth(false)
                 setMessage(res.data.Error)
             }
         })
         .then(err=>console.log(err));
-        
+        console.log(id)
         
     }, []);
 
@@ -40,6 +41,7 @@ const Home = () => {
     }
 
     const handleQuiz = (event)=>{
+        console.log(id)
         setNextq(0)
         setPoprawneOdp(0)
         event.preventDefault();
@@ -56,7 +58,7 @@ const Home = () => {
         })
         .then(err=>console.log(err));
 
-       
+        
     }
 
     const handleNext=()=>{
@@ -72,13 +74,27 @@ const Home = () => {
                     }
                     break;
                 }
-            }
-           
-           console.log(selectedSize ? `You selected ${selectedSize}` : `You haven't selected any size`)
-     
+        }
 
         
         setNextq(nextq+1);
+        setTimeout(() => {
+            if(nextq>=9){
+            axios.post('http://localhost:8082/sendscore',{id,poprawneOdp})
+            .then(res=>{
+                if(res.data){
+                    console.log(res.data)
+                } else{
+                    alert(res.data.Error);
+                    alert("blad")
+                }
+            })
+            .then(err=>console.log(err));
+        }
+        }, 1000);
+        
+        
+            
     }
 
   return (
