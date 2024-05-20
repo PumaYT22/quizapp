@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { response } from 'express'
 import mysql from 'mysql'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
@@ -22,7 +22,7 @@ const db=mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:'signup'
+    database:'quiz'
 });
 
 
@@ -71,6 +71,42 @@ app.post('/login',(req,res)=>{
             return res.json({Error:"No email existed"});
         }
     })
+})
+
+app.post('/getquiz',(req,res)=>{
+    const sql='SELECT * from questions order by rand() limit 10;';
+    db.query(sql,(err,data)=>{
+        if(err) return res.json({Error:"Nie pobrano danych"});
+        if(data.length>0){
+            if(response){
+                return res.json(data);
+            }
+            else{
+                return res.json({Error:"Coś poszło nie tak..."})
+            }
+        }
+        else{
+            return res.json({Error:"Nie ma żadnych pytań"});
+        }
+        
+    })
+    // db.query(sql,(err,data)=>{
+    //     if(err) return res.json({Error:"Nie pobrano danych"});
+    //     if(data.length>0){
+    //             if(response){
+                    
+    //                 const name=data[0].name
+    //                 const token=jwt.sign({name},"jwt-secret-key",{expiresIn:'1d'});
+    //                 res.cookie('token',token);
+    //                 return res.json(data);
+    //             }
+    //             else{
+    //                 return res.json({Error:"Coś poszło nie tak..."})
+    //             }
+    //     } else{
+    //         return res.json({Error:"Nie ma żadnych pytań"});
+    //     }
+    // })
 })
 
 
