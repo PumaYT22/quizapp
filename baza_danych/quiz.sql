@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 13, 2024 at 01:08 PM
--- Wersja serwera: 10.4.28-MariaDB
--- Wersja PHP: 8.1.17
+-- Generation Time: Maj 27, 2024 at 08:15 AM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,13 @@ CREATE TABLE `login` (
   `password` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`LoginID`, `email`, `password`, `name`) VALUES
+(1, 'jacek@gmail.com', '$2b$10$x6sJWdudl/Sul2T95JhhDuP98aSkJbRzTBuXpmK0tHgkrSb5DrrfW', 'jacek2');
 
 -- --------------------------------------------------------
 
@@ -99,6 +106,27 @@ INSERT INTO `questions` (`QuestionID`, `content`, `odpA`, `odpB`, `odpC`, `odpD`
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `scoreboard`
+--
+
+CREATE TABLE `scoreboard` (
+  `id` int(11) NOT NULL,
+  `id_login` int(11) NOT NULL,
+  `wynik` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `scoreboard`
+--
+
+INSERT INTO `scoreboard` (`id`, `id_login`, `wynik`) VALUES
+(11, 1, 0),
+(12, 1, 3),
+(13, 1, 7);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `users`
 --
 
@@ -125,6 +153,13 @@ ALTER TABLE `questions`
   ADD PRIMARY KEY (`QuestionID`);
 
 --
+-- Indeksy dla tabeli `scoreboard`
+--
+ALTER TABLE `scoreboard`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_login` (`id_login`);
+
+--
 -- Indeksy dla tabeli `users`
 --
 ALTER TABLE `users`
@@ -138,7 +173,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `LoginID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `LoginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `questions`
@@ -147,10 +182,26 @@ ALTER TABLE `questions`
   MODIFY `QuestionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
+-- AUTO_INCREMENT for table `scoreboard`
+--
+ALTER TABLE `scoreboard`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `scoreboard`
+--
+ALTER TABLE `scoreboard`
+  ADD CONSTRAINT `scoreboard_ibfk_1` FOREIGN KEY (`id_login`) REFERENCES `login` (`LoginID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
