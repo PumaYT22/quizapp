@@ -106,6 +106,9 @@ app.post('/getquiz',(req,res)=>{
         
 })
 
+
+
+
 app.post('/sendscore',(req,res)=>{
     const sql="INSERT INTO scoreboard (`id_login`,`wynik`) VALUES (?,?)";
     db.query(sql,[req.body.id,req.body.poprawneOdp],(err,data)=>{
@@ -116,6 +119,25 @@ app.post('/sendscore',(req,res)=>{
         
 })
 })
+
+
+// app.get('/getsc',(req,res)=>{
+//     const sql='SELECT login.name,scoreboard.wynik FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.id DESC;';
+//     db.query(sql,(err,data)=>{
+//         if(err) return res.json({Error:"Nie pobrano danych"});
+//         if(data.length>0){
+//             if(response){
+//                 return res.json(data);
+//             }
+//             else{
+//                 return res.json({Error:"Coś poszło nie tak..."})
+//             }
+//         }
+//         else{
+//             return res.json({Error:"Nie ma żadnych pytań"});
+//         }
+        
+// })})
 
 
 const verifyUser=(req,res,next)=>{

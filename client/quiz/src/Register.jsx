@@ -63,7 +63,7 @@ const Register = () => {
                         <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Zarejesturj się</p>
 
                             <form class="mx-1 mx-md-4" onSubmit={handleSubmit}>
 
@@ -94,7 +94,7 @@ const Register = () => {
                                 <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                 <label class="form-label" htmlFor='password'>Twoje Hasło</label>
-                                <input type="text" placeholder='Podaj Hasło' name='password' required
+                                <input type="password" placeholder='Podaj Hasło' name='password' required
                                     className='form-control rounded-0'
                                     onChange={e=>setValues({...values,password:e.target.value})}></input>
                                 

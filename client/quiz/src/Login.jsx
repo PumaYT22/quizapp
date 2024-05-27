@@ -80,8 +80,8 @@ function Login() {
                                 <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                     <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                    <label class="form-label" htmlFor='password'>Twójo Hasło</label>
-                                    <input type="text" placeholder='Podaj Hasło' name='password' required
+                                    <label class="form-label" htmlFor='password'>Twóje Hasło</label>
+                                    <input type="password" placeholder='Podaj Hasło' name='password' required
                     className='form-control rounded-0'
                     onChange={e=>setValues({...values,password:e.target.value})}
                     ></input>
@@ -94,7 +94,7 @@ function Login() {
 
                                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">   
                                     <button type="submit" style={{height:"50px",marginRight:"10px"}} class="btn btn-primary btn-lg">Zaloguj się</button>          
-                                    <Link to="/register"  style={{height:"50px",scale:"0.8"}} class="btn btn-primary btn-lg">Zarejesturj się</Link>
+                                    <Link to="/register"  style={{height:"50px",scale:"0.8"}} class="btn btn-primary btn-lg">Zarejestruj się</Link>
                                 </div>
 
                                 </form>
