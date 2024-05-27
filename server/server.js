@@ -4,11 +4,17 @@ import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import cookieParser from 'cookie-parser'
+import path from 'path'
+import {fileURLToPath} from 'url';
+
 
 const salt=10;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
+
 
 const corsOptions ={
     origin:'http://localhost:3000', 
@@ -17,6 +23,10 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
+
+console.log(path.join(__dirname, '../client/quiz/build'))
+app.use(express.static(path.join(__dirname, '../client/quiz/build')));
 
 const db=mysql.createConnection({
     host:"localhost",
