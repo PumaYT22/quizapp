@@ -14,7 +14,7 @@ const Register = () => {
     const navigate=useNavigate()
     const handleSubmit = (event)=>{
         event.preventDefault();
-        axios.post('http://localhost:8082/register',values)
+        axios.post('http://172.17.0.173:8082/register',values)
         .then(res=>{
             if(res.data.Status==="Success"){
                 navigate('/login')

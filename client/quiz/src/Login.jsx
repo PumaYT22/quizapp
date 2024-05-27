@@ -15,7 +15,7 @@ function Login() {
     axios.defaults.withCredentials=true;
     const handleSubmit = (event)=>{
         event.preventDefault();
-        axios.post('http://localhost:8082/login',values)
+        axios.post('http://172.17.0.173:8082/login',values)
         .then(res=>{
             if(res.data.Status==="Success"){
                 navigate('/')

@@ -17,7 +17,7 @@ const Home = () => {
 
     axios.defaults.withCredentials=true;
     useEffect(() => {
-        axios.get('http://localhost:8082')
+        axios.get('http://172.17.0.173:8082/verify')
         .then(res=>{
             if(res.data.Status==="Success"){
                 setAuth(true)
@@ -34,7 +34,7 @@ const Home = () => {
     }, []);
 
     const handleDelete=()=>{
-        axios.get('http://localhost:8082/logout')
+        axios.get('http://172.17.0.173:8082/logout')
         .then(res=>{
             window.location.reload();
            
@@ -46,7 +46,7 @@ const Home = () => {
         setNextq(0)
         setPoprawneOdp(0)
         event.preventDefault();
-        axios.post('http://localhost:8082/getquiz')
+        axios.post('http://172.17.0.173:8082/getquiz')
         .then(res=>{
             if(res.data){
                 console.log(res.data)
@@ -81,7 +81,7 @@ const Home = () => {
         setNextq(nextq+1);
         setTimeout(() => {
             if(nextq>=9){
-            axios.post('http://localhost:8082/sendscore',{id,poprawneOdp})
+            axios.post('http://172.17.0.173:8082/sendscore',{id,poprawneOdp})
             .then(res=>{
                 if(res.data){
                     console.log(res.data)
