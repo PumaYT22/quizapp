@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
+import ob from './assets/obraz1.jpg'
 
 import './styles/Quiz.css'
 
@@ -145,10 +146,40 @@ const Home = () => {
             </div>
             :
             <div>
-                <h3>{message}</h3>
-                <h3>Zaloguj się teraz</h3>
-                <Link to="/login" className='btn btn-primary'>Login</Link>
+              
+                <div class="card mb-3" style={{maxWidth:"940px"}}>
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                        <img
+                            src={ob}
+                            alt="Trendy Pants and Shoes"
+                            class="img-fluid rounded-start"
+                        />
+                        </div>
+                        <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Zaloguj się teraz!</h5>
+                            <p class="card-text">
+                            Musisz się zalogować, aby zacząć korzystać z naszej strony!!
+                            </p>
+                            <hr></hr>
+                            <p class="card-text">
+                            Nasza strona oferuje quizy do inf 04. Przygotowuje was żeby zdać egzamin teoretyczny na 100%!
+                            </p>
+                            <hr></hr>
+                            <p class="card-text">
+                            Stronę przygotowali Jakub Guźda i Kamil Kurpisz z Klasy 4B jako projekt z aplikacji webowych.
+                            </p>
+                            <Link to="/login" className='btn btn-primary'>Login</Link>
+                            <p class="card-text">
+                            <small class="text-muted">{message}</small>
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         }
     </div>
   )
