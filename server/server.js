@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 
 console.log(path.join(__dirname, '../client/quiz/build'))
-// app.use(express.static(path.join(__dirname, '../client/quiz/build')));
+//app.use(express.static(path.join(__dirname, '../client/quiz/build')));
 
 const db=mysql.createConnection({
     host:"localhost",
@@ -36,10 +36,9 @@ const db=mysql.createConnection({
     database:'quiz'
 });
 
-// app.get("/*", (req, res) => {
-    // res.sendFile(path.join(__dirname + "../client/quiz/build"));
-//   });
 
+
+ 
 
 
 
@@ -135,6 +134,11 @@ const verifyUser=(req,res,next)=>{
         })
     }
 }
+
+// app.get('/*',verifyUser,(req,res)=>{
+//     //res.sendFile(path.join(__dirname + "../client/quiz/build"));
+//      return res.json({Status:"Success",name:req.name,id:req.id})
+//  })
 
 app.get('/',verifyUser,(req,res)=>{
    // res.sendFile(path.join(__dirname + "../client/quiz/build"));

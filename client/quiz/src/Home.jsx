@@ -99,6 +99,7 @@ const Home = () => {
     }
 
   return (
+    <section class="d-flex justify-content-center align-items-center vh-100 vw-100" style={{backgroundColor: "#eee"}}>
     <div className='container mt-4'>
         {
             auth ?
@@ -178,6 +179,7 @@ const Home = () => {
         </div>
         }
     </div>
+    </section>
   )
 }
 

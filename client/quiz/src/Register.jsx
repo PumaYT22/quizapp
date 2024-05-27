@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
+
 const Register = () => {
     const [values,setValues]=useState({
         name:'',
@@ -25,7 +26,7 @@ const Register = () => {
     }
 
   return (
-    <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
+    <div className='d-flex justify-content-center align-items-center  vh-100 vw-100' style={{backgroundColor: "#eee"}}>
         {/* <div className='bg-white p-3 rounded w-25'>
             <h2>Zarejestruj się</h2>
             <form onSubmit={handleSubmit}>
@@ -70,7 +71,7 @@ const Register = () => {
                                 <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                 <label class="form-label" htmlFor='name'>Twój Nick</label>
-                                <input type="text" 
+                                <input type="text" required
                                     placeholder='Podaj Nazwe' name='name'
                                     className='form-control rounded-0'
                                     onChange={e=>setValues({...values,name:e.target.value})}></input>
@@ -82,7 +83,7 @@ const Register = () => {
                                 <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                 <label class="form-label" htmlFor='email'>Twój Email</label>
-                                <input type="text" placeholder='Podaj Email' name='email' 
+                                <input type="text" placeholder='Podaj Email' name='email' required
                                     className='form-control rounded-0'
                                     onChange={e=>setValues({...values,email:e.target.value})}></input>
                                 
@@ -93,7 +94,7 @@ const Register = () => {
                                 <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                 <label class="form-label" htmlFor='password'>Twoje Hasło</label>
-                                <input type="text" placeholder='Podaj Hasło' name='password' 
+                                <input type="text" placeholder='Podaj Hasło' name='password' required
                                     className='form-control rounded-0'
                                     onChange={e=>setValues({...values,password:e.target.value})}></input>
                                 
@@ -109,7 +110,7 @@ const Register = () => {
                             </div> */}
 
                             <div class="form-check d-flex justify-content-center mb-5">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
+                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required />
                                 <label class="form-check-label" for="form2Example3">
                                 Akceptujesz nasze warunki <a href="#!">Regulamin Strony</a>
                                 </label>
@@ -117,7 +118,7 @@ const Register = () => {
 
                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">   
                                 <button type="submit" style={{height:"50px",marginRight:"10px"}} class="btn btn-primary btn-lg">Zarejestruj się</button>          
-                                <Link to="/login" style={{height:"50px"}} class="btn btn-primary btn-lg">Zaloguj się</Link>
+                                <Link to="/login" style={{height:"50px",scale:"0.8"}} class="btn btn-primary btn-lg">Zaloguj się</Link>
                             </div>
 
                             </form>
