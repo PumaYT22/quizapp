@@ -65,9 +65,9 @@ const Home = () => {
         .then(err=>console.log(err));
     }
 
-    const handleScoreboard=()=>{
+    const handleScoreboard=(sortuj)=>{
         setTabela(true)
-        axios.get('http://172.17.0.173:8082/getsc')
+        axios.get('http://172.17.0.173:8082/getsc?sortuj='+sortuj)
         .then(res=>{
             if(res.data){
                 setTabelawyniki(res.data)    
@@ -127,12 +127,14 @@ const Home = () => {
             auth ?  
                 <div>
                     <h3>Jestes zalogowany {name}</h3>
-                    <button className='btn btn-primary' onClick={handleQuiz}>Start Quiz</button>
-                    <button className='btn btn-danger' onClick={handleDelete}>Wyloguj</button>
-                    <button className='btn btn-success' onClick={handleScoreboard}>Tabela Wyników</button>
+                    <button className='btn btn-primary m-1' onClick={handleQuiz}>Start Quiz</button>
+                    <button className='btn btn-danger m-1' onClick={handleDelete}>Wyloguj</button>
+                    <button className='btn btn-success m-1' onClick={()=>{handleScoreboard(0)}}>Tabela Wyników</button>
                     {tabela ? 
                     <div>
-                        
+                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(1)}}>Sortuj po Terminie</button>
+                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(2)}}>Sortuj po Czasie</button>
+                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(0)}}>Sortuj po Wyniku</button>
                         <table class="table">
                             <thead>
                             <tr>

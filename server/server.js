@@ -134,7 +134,23 @@ app.post('/sendscore',(req,res)=>{
 })
 
 app.get('/getsc',(req,res)=>{
-    const sql='SELECT login.name,scoreboard.wynik,scoreboard.termin,scoreboard.czas FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.wynik DESC;';
+    let sql='SELECT login.name,scoreboard.wynik,scoreboard.termin,scoreboard.czas FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.wynik DESC;';
+    let v=req.query.sortuj
+    if(v!=null){
+        switch (v) {
+            case "1":
+                sql='SELECT login.name,scoreboard.wynik,scoreboard.termin,scoreboard.czas FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.termin DESC;';
+                break;
+            case "2":
+                sql='SELECT login.name,scoreboard.wynik,scoreboard.termin,scoreboard.czas FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.czas ASC;';
+                break;
+        
+            default:
+                break;
+        }
+    }
+   
+    
     db.query(sql,(err,data)=>{
         if(err) return res.json({Error:"Nie pobrano danych"});
         if(data.length>0){
