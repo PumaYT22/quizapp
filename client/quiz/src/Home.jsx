@@ -9,6 +9,8 @@ const Home = () => {
     const [auth,setAuth] = useState(false);
     const [message,setMessage]=useState('')
     const [quizstart,setQuizStart]=useState(false)
+    const [tabela,setTabela]=useState(false)
+    const [tabelawyniki,setTabelawyniki]=useState([])
     const [quiz,setQuiz]=useState([])
     const [poprawneOdp,setPoprawneOdp]=useState(0)
     const [nextq,setNextq]=useState(0)
@@ -17,7 +19,7 @@ const Home = () => {
 
     axios.defaults.withCredentials=true;
     useEffect(() => {
-        axios.get('http://172.17.0.173:8082/verify')
+        axios.get('http://172.17.0.173:8082/verify',{ withCredentials: true })
         .then(res=>{
             if(res.data.Status==="Success"){
                 setAuth(true)
@@ -43,6 +45,7 @@ const Home = () => {
 
     const handleQuiz = (event)=>{
         console.log(id)
+        setTabela(false)
         setNextq(0)
         setPoprawneOdp(0)
         event.preventDefault();
@@ -54,12 +57,25 @@ const Home = () => {
                 setQuizStart(true)
             } else{
                 alert(res.data.Error);
-                alert("blad")
+                alert("Błąd")
             }
         })
         .then(err=>console.log(err));
+    }
 
-        
+    const handleScoreboard=()=>{
+        setTabela(true)
+        axios.get('http://172.17.0.173:8082/getsc')
+        .then(res=>{
+            if(res.data){
+                setTabelawyniki(res.data)    
+            } else{
+                alert(res.data.Error);
+                alert("Błąd")
+            }
+        })
+        .then(err=>console.log(err));
+        console.log(tabelawyniki)
     }
 
     const handleNext=()=>{
@@ -102,49 +118,76 @@ const Home = () => {
     <section class="d-flex justify-content-center align-items-center vh-100 vw-100" style={{backgroundColor: "#eee"}}>
     <div className='container mt-4'>
         {
-            auth ?
-            <div>
-                <h3>Jestes zalogowany {name}</h3>
-                <button className='btn btn-primary' onClick={handleQuiz}>Start Quiz</button>
-                <button className='btn btn-danger' onClick={handleDelete}>Wyloguj</button>
-                <div className="quiz-container">
-                    <h1>Quiz App</h1>
-                  
-                    <div id="Pytania">
-                        {quizstart ?
-                            quiz.map((x,index)=>
-                                index===nextq ?
-                                <div key={x.QuestionID}>
-                                    <div className="py-2 h5"><b>Q. {x.content}</b></div>
-                                        <div className="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                                            <label className="options">{x.odpA}
-                                                <input type="radio" value="A" name="radio" />
-                                                <span className="checkmark"></span>
-                                            </label>
-                                            <label className="options">{x.odpB}
-                                                <input type="radio" value="B" name="radio"/>
-                                                <span className="checkmark"></span>
-                                            </label>
-                                            <label className="options">{x.odpC}
-                                                <input type="radio" value="C" name="radio"/>
-                                                <span className="checkmark"></span>
-                                            </label>
-                                            <label className="options">{x.odpD}
-                                                <input type="radio" value="D" name="radio"/>
-                                                <span className="checkmark"></span>
-                                            </label>
-                                            
+            auth ?  
+                <div>
+                    <h3>Jestes zalogowany {name}</h3>
+                    <button className='btn btn-primary' onClick={handleQuiz}>Start Quiz</button>
+                    <button className='btn btn-danger' onClick={handleDelete}>Wyloguj</button>
+                    <button className='btn btn-success' onClick={handleScoreboard}>Tabela Wyników</button>
+                    {tabela ? 
+                    <div>
+                        
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Nazwa Gracza</th>
+                                <th>Wynik</th>    
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {tabelawyniki.map((x,index)=>
+                                    
+                                    
+                                    <tr key={index}>
+                                        <td>{x.name}</td>
+                                        <td>{x.wynik}</td>
+                                        
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                        </div>
+                    :
+
+                        <div className="quiz-container">
+                            <h1>Quiz App</h1>
+                            <div id="Pytania">
+                            {quizstart ?
+                                quiz.map((x,index)=>
+                                    index===nextq ?
+                                    <div key={x.QuestionID}>
+                                        <div className="py-2 h5"><b>Q. {x.content}</b></div>
+                                            <div className="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                                                <label className="options">{x.odpA}
+                                                    <input type="radio" value="A" name="radio" />
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                                <label className="options">{x.odpB}
+                                                    <input type="radio" value="B" name="radio"/>
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                                <label className="options">{x.odpC}
+                                                    <input type="radio" value="C" name="radio"/>
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                                <label className="options">{x.odpD}
+                                                    <input type="radio" value="D" name="radio"/>
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                                
+                                        </div>
+                                        <button className='btn btn-danger' onClick={handleNext}>Next</button>
                                     </div>
-                                    <button className='btn btn-danger' onClick={handleNext}>Next</button>
-                                </div>
-                                :""
-                            )
-                        :
-                        ""}
-                    </div>
-                    <h1>Ilosc poprawnych {poprawneOdp}/10</h1>
+                                    :""
+                                )
+                            :
+                            ""}
+                        </div>
+                        <h1>Ilosc poprawnych {poprawneOdp}/10</h1>
+                        </div>
+                    }
+           
                 </div>
-            </div>
             :
             <div className="card mb-3" style={{maxWidth:"940px"}}>
             <div className="row g-0">

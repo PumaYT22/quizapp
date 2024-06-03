@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
 
+
+
 const Register = () => {
     const [values,setValues]=useState({
         name:'',
@@ -14,7 +16,8 @@ const Register = () => {
     const navigate=useNavigate()
     const handleSubmit = (event)=>{
         event.preventDefault();
-        axios.post('http://172.17.0.173:8082/register',values)
+      
+        axios.post(`http://172.17.0.173:8082/register`,values)
         .then(res=>{
             if(res.data.Status==="Success"){
                 navigate('/login')

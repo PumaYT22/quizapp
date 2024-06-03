@@ -17,13 +17,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
+const corsOptions = {
+    origin: true,
+    credentials: true,
+    optionSuccessStatus: 200
 }
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin); // Update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
 
 
 console.log(path.join(__dirname, '../client/quiz/build'))
@@ -76,6 +88,7 @@ app.post('/login',(req,res)=>{
                     const id=data[0].LoginID
                     const token=jwt.sign({payload: { name: name, id: id}},"jwt-secret-key",{expiresIn:'1d'});
                     res.cookie('token',token);
+                   
                     return res.json({Status:"Success"});
                 }
                 else{
@@ -103,41 +116,41 @@ app.post('/getquiz',(req,res)=>{
         else{
             return res.json({Error:"Nie ma żadnych pytań"});
         }
-        
-})
+    }); // Brakujący średnik i zakończenie bloku if-else
+});
+
 
 
 
 
 app.post('/sendscore',(req,res)=>{
     const sql="INSERT INTO scoreboard (`id_login`,`wynik`) VALUES (?,?)";
-    db.query(sql,[req.body.id,req.body.poprawneOdp],(err,data)=>{
+    db.query(sql,[req.body.id,req.body.poprawneOdp+1],(err,data)=>{
         if(err) return res.json({Error:"Inserting data Error in server"});
 
         return res.json({Status:"Success"});
     })
         
 })
-})
 
-
-// app.get('/getsc',(req,res)=>{
-//     const sql='SELECT login.name,scoreboard.wynik FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.id DESC;';
-//     db.query(sql,(err,data)=>{
-//         if(err) return res.json({Error:"Nie pobrano danych"});
-//         if(data.length>0){
-//             if(response){
-//                 return res.json(data);
-//             }
-//             else{
-//                 return res.json({Error:"Coś poszło nie tak..."})
-//             }
-//         }
-//         else{
-//             return res.json({Error:"Nie ma żadnych pytań"});
-//         }
+app.get('/getsc',(req,res)=>{
+    const sql='SELECT login.name,scoreboard.wynik FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.wynik DESC;';
+    db.query(sql,(err,data)=>{
+        if(err) return res.json({Error:"Nie pobrano danych"});
+        if(data.length>0){
+            if(response){
+                return res.json(data);
+            }
+            else{
+                return res.json({Error:"Coś poszło nie tak..."})
+            }
+        }
+        else{
+            return res.json({Error:"Nie ma żadnych pytań"});
+        }
         
-// })})
+})})
+
 
 
 const verifyUser=(req,res,next)=>{
@@ -159,11 +172,11 @@ const verifyUser=(req,res,next)=>{
 
 app.get('/',verifyUser,(req,res)=>{
     
-     return res.sendFile(path.join(__dirname + "../client/quiz/build"));
+     return res.sendFile(path.join(__dirname + "/../client/quiz/build"));
  })
 
 app.get('/verify',verifyUser,(req,res)=>{
-   // res.sendFile(path.join(__dirname + "../client/quiz/build"));
+    res.sendFile(path.join(__dirname + "../client/quiz/build"));
     return res.json({Status:"Success",name:req.name,id:req.id})
 })
 
@@ -178,4 +191,6 @@ app.get('/logout',(req,res)=>{
 app.listen(8082,()=>{
     console.log("Running...");
 })
+
+
 
