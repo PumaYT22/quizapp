@@ -124,8 +124,8 @@ app.post('/getquiz',(req,res)=>{
 
 
 app.post('/sendscore',(req,res)=>{
-    const sql="INSERT INTO scoreboard (`id_login`,`wynik`) VALUES (?,?)";
-    db.query(sql,[req.body.id,req.body.poprawneOdp+1],(err,data)=>{
+    const sql="INSERT INTO scoreboard (`id_login`,`wynik`,`termin`,`czas`) VALUES (?,?,?,?)";
+    db.query(sql,[req.body.id,req.body.poprawneOdp+1,req.body.termin,req.body.minuty],(err,data)=>{
         if(err) return res.json({Error:"Inserting data Error in server"});
 
         return res.json({Status:"Success"});
@@ -134,7 +134,7 @@ app.post('/sendscore',(req,res)=>{
 })
 
 app.get('/getsc',(req,res)=>{
-    const sql='SELECT login.name,scoreboard.wynik FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.wynik DESC;';
+    const sql='SELECT login.name,scoreboard.wynik,scoreboard.termin,scoreboard.czas FROM scoreboard,login WHERE scoreboard.id_login=login.LoginID ORDER BY scoreboard.wynik DESC;';
     db.query(sql,(err,data)=>{
         if(err) return res.json({Error:"Nie pobrano danych"});
         if(data.length>0){

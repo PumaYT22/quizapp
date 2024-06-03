@@ -9,6 +9,7 @@ const Home = () => {
     const [auth,setAuth] = useState(false);
     const [message,setMessage]=useState('')
     const [quizstart,setQuizStart]=useState(false)
+    const [czasr,setCzar]=useState(null)
     const [tabela,setTabela]=useState(false)
     const [tabelawyniki,setTabelawyniki]=useState([])
     const [quiz,setQuiz]=useState([])
@@ -48,6 +49,7 @@ const Home = () => {
         setTabela(false)
         setNextq(0)
         setPoprawneOdp(0)
+        setCzar(Date.now)
         event.preventDefault();
         axios.post('http://172.17.0.173:8082/getquiz')
         .then(res=>{
@@ -97,7 +99,11 @@ const Home = () => {
         setNextq(nextq+1);
         setTimeout(() => {
             if(nextq>=9){
-            axios.post('http://172.17.0.173:8082/sendscore',{id,poprawneOdp})
+            let d=new Date()
+            let termin=(d.toISOString()).split('T')[0]
+            let czas=czasr-Date.now()
+            let minuty=Math.abs((Math.floor((czas / 1000) % 60)));
+            axios.post('http://172.17.0.173:8082/sendscore',{id,poprawneOdp,termin,minuty})
             .then(res=>{
                 if(res.data){
                     console.log(res.data)
@@ -115,7 +121,7 @@ const Home = () => {
     }
 
   return (
-    <section class="d-flex justify-content-center align-items-center vh-100 vw-100" style={{backgroundColor: "#eee"}}>
+    <section class="d-flex justify-content-center align-items-center vw-100" style={{backgroundColor: "#eee"}}>
     <div className='container mt-4'>
         {
             auth ?  
@@ -132,16 +138,20 @@ const Home = () => {
                             <tr>
                                 <th>Nazwa Gracza</th>
                                 <th>Wynik</th>    
+                                <th>Data Wykonania</th>
+                                <th>Czas Wykonania</th>
                             </tr>
                             </thead>
                             <tbody>
+                                
                                 {tabelawyniki.map((x,index)=>
                                     
                                     
                                     <tr key={index}>
                                         <td>{x.name}</td>
                                         <td>{x.wynik}</td>
-                                        
+                                        <td>{(x.termin).split("T")[0]}</td>
+                                        <td>{x.czas}s</td>
                                     </tr>
                                 )}
                             </tbody>
