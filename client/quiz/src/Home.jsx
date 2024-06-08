@@ -2,8 +2,9 @@ import React, { useState,useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 import ob from './assets/obraz1.jpg'
-
+import config from './config';
 import './styles/Quiz.css'
+import Navbar from './components/Navbar/Navbar';
 
 const Home = () => {
     const [auth,setAuth] = useState(false);
@@ -20,7 +21,7 @@ const Home = () => {
 
     axios.defaults.withCredentials=true;
     useEffect(() => {
-        axios.get('http://172.17.0.173:8082/verify',{ withCredentials: true })
+        axios.get(`${config.API_BASE_URL}/verify`,{ withCredentials: true })
         .then(res=>{
             if(res.data.Status==="Success"){
                 setAuth(true)
@@ -37,7 +38,7 @@ const Home = () => {
     }, []);
 
     const handleDelete=()=>{
-        axios.get('http://172.17.0.173:8082/logout')
+        axios.get(`${config.API_BASE_URL}/logout`)
         .then(res=>{
             window.location.reload();
            
@@ -51,7 +52,7 @@ const Home = () => {
         setPoprawneOdp(0)
         setCzar(Date.now)
         event.preventDefault();
-        axios.post('http://172.17.0.173:8082/getquiz')
+        axios.post(`${config.API_BASE_URL}/getquiz`)
         .then(res=>{
             if(res.data){
                 console.log(res.data)
@@ -67,7 +68,7 @@ const Home = () => {
 
     const handleScoreboard=(sortuj)=>{
         setTabela(true)
-        axios.get('http://172.17.0.173:8082/getsc?sortuj='+sortuj)
+        axios.get(`${config.API_BASE_URL}/getsc?sortuj=`+sortuj)
         .then(res=>{
             if(res.data){
                 setTabelawyniki(res.data)    
@@ -103,7 +104,7 @@ const Home = () => {
             let termin=(d.toISOString()).split('T')[0]
             let czas=czasr-Date.now()
             let minuty=Math.abs((Math.floor((czas / 1000) % 60)));
-            axios.post('http://172.17.0.173:8082/sendscore',{id,poprawneOdp,termin,minuty})
+            axios.post(`${config.API_BASE_URL}/sendscore`,{id,poprawneOdp,termin,minuty})
             .then(res=>{
                 if(res.data){
                     console.log(res.data)
@@ -121,47 +122,20 @@ const Home = () => {
     }
 
   return (
-    <section class="d-flex justify-content-center align-items-center vw-100" style={{backgroundColor: "#eee"}}>
+    <>
+  
+     <Navbar autoryzacja={auth} nazwa={name} ></Navbar>
+    <section className="d-flex justify-content-center  w-100 h-100 bg-dark-subtle homepage" data-bs-theme="dark" >
     <div className='container mt-4'>
         {
             auth ?  
-                <div>
-                    <h3>Jestes zalogowany {name}</h3>
-                    <button className='btn btn-primary m-1' onClick={handleQuiz}>Start Quiz</button>
-                    <button className='btn btn-danger m-1' onClick={handleDelete}>Wyloguj</button>
-                    <button className='btn btn-success m-1' onClick={()=>{handleScoreboard(0)}}>Tabela Wyników</button>
-                    {tabela ? 
-                    <div>
-                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(1)}}>Sortuj po Terminie</button>
-                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(2)}}>Sortuj po Czasie</button>
-                        <button className='btn btn-warning m-1' onClick={()=>{handleScoreboard(0)}}>Sortuj po Wyniku</button>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Nazwa Gracza</th>
-                                <th>Wynik</th>    
-                                <th>Data Wykonania</th>
-                                <th>Czas Wykonania</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                
-                                {tabelawyniki.map((x,index)=>
-                                    
-                                    
-                                    <tr key={index}>
-                                        <td>{x.name}</td>
-                                        <td>{x.wynik}</td>
-                                        <td>{(x.termin).split("T")[0]}</td>
-                                        <td>{x.czas}s</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                        </div>
-                    :
+                <div className='d-flex flex-column justify-content-center'>
+                   
+                    <button className='btn btn-primary m-1 h-25 fs-4' onClick={handleQuiz}>Start Quiz / Zrestartuj</button>
+                  
+                    
 
-                        <div className="quiz-container">
+                        <div className="quiz-container card">
                             <h1>Quiz App</h1>
                             <div id="Pytania">
                             {quizstart ?
@@ -196,8 +170,9 @@ const Home = () => {
                             ""}
                         </div>
                         <h1>Ilosc poprawnych {poprawneOdp}/10</h1>
+                        
                         </div>
-                    }
+                    
            
                 </div>
             :
@@ -235,6 +210,7 @@ const Home = () => {
         }
     </div>
     </section>
+    </>
   )
 }
 

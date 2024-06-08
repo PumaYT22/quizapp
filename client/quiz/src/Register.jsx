@@ -17,12 +17,12 @@ const Register = () => {
     const handleSubmit = (event)=>{
         event.preventDefault();
       
-        axios.post(`http://172.17.0.173:8082/register`,values)
+        axios.post(`http://192.168.227.7:8082/register`,values)
         .then(res=>{
             if(res.data.Status==="Success"){
                 navigate('/login')
             } else{
-                alert("Error");
+                alert(res.data.Error);
             }
         })
         .then(err=>console.log(err));

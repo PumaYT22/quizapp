@@ -1,5 +1,5 @@
 body {
-  background-color: #eee;
+  background-color: rgb(27,29,33);
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -9,6 +9,7 @@ body {
 
 .App {
   text-align: center;
+
 }
 
 .App-logo {

@@ -26,7 +26,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin); // Update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -54,24 +54,51 @@ const db=mysql.createConnection({
 
 
 
-app.post('/register',(req,res)=>{
-    const sql="INSERT INTO login (`name`,`email`,`password`) VALUES (?)";
-    bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
-        if(err) return res.json({Error: "Error for hassing password"});
-
-        const values=[
-            req.body.name,
-            req.body.email,
-            hash
-        ]
-        db.query(sql,[values],(err,result)=>{
-            if(err) return res.json({Error:"Inserting data Error in server"});
-
-            return res.json({Status:"Success"});
-        })
-    })
+function validatePassword(password) {
+    const minLength = 8;
+    const hasNumber = /\d/;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
     
-})
+    if (password.length < minLength) {
+        return { valid: false, message: "Hasło musi mieć więcej niż 8 liter" };
+    }
+    if (!hasNumber.test(password)) {
+        return { valid: false, message: "Hasło musi mieć jedną cyfrę przynajmniej" };
+    }
+    if (!hasSpecialChar.test(password)) {
+        return { valid: false, message: "Hasło musi mieć specjalny znak" };
+    }
+    return { valid: true };
+}
+
+app.post('/register', (req, res) => {
+    const { name, email, password } = req.body;
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+        return res.json({ Error: passwordValidation.message });
+    }
+
+    const checkEmailSql = "SELECT * FROM login WHERE email = ?";
+    db.query(checkEmailSql, [email], (err, result) => {
+        if (err) return res.json({ Error: "Error checking email in server" });
+        if (result.length > 0) {
+            return res.json({ Error: "Email already exists" });
+        } else {
+            const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES (?)";
+            bcrypt.hash(password.toString(), salt, (err, hash) => {
+                if (err) return res.json({ Error: "Error hashing password" });
+
+                const values = [name, email, hash];
+                db.query(sql, [values], (err, result) => {
+                    if (err) return res.json({ Error: "Inserting data error in server" });
+
+                    return res.json({ Status: "Success" });
+                });
+            });
+        }
+    });
+});
 
 
 app.post('/login',(req,res)=>{
@@ -116,7 +143,7 @@ app.post('/getquiz',(req,res)=>{
         else{
             return res.json({Error:"Nie ma żadnych pytań"});
         }
-    }); // Brakujący średnik i zakończenie bloku if-else
+    }); 
 });
 
 
