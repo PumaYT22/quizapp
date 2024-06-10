@@ -3,6 +3,7 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import '../../App.css';
 import Navbar from '../../components/Navbar/Navbar'
+import config from '../../config';
 
 const WynikiPage = () => {
 
@@ -15,7 +16,7 @@ const WynikiPage = () => {
 
     axios.defaults.withCredentials=true;
     useEffect(() => {
-        axios.get('http://192.168.227.7:8082/verify',{ withCredentials: true })
+        axios.get(`${config.API_BASE_URL}/verify`,{ withCredentials: true })
         .then(res=>{
             if(res.data.Status==="Success"){
                 setAuth(true)
@@ -34,7 +35,7 @@ const WynikiPage = () => {
 
     const handleScoreboard=(sortuj)=>{
        
-        axios.get('http://192.168.227.7:8082/getsc?sortuj='+sortuj)
+        axios.get(`${config.API_BASE_URL}/getsc?sortuj=`+sortuj)
         .then(res=>{
             if(res.data){
                 setTabelawyniki(res.data)    

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 27, 2024 at 08:15 AM
--- Wersja serwera: 10.4.32-MariaDB
--- Wersja PHP: 8.2.12
+-- Generation Time: Cze 09, 2024 at 11:02 PM
+-- Wersja serwera: 10.4.14-MariaDB
+-- Wersja PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,14 +32,16 @@ CREATE TABLE `login` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `login`
 --
 
 INSERT INTO `login` (`LoginID`, `email`, `password`, `name`) VALUES
-(1, 'jacek@gmail.com', '$2b$10$x6sJWdudl/Sul2T95JhhDuP98aSkJbRzTBuXpmK0tHgkrSb5DrrfW', 'jacek2');
+(1, 'jacek@gmail.com', '$2b$10$x6sJWdudl/Sul2T95JhhDuP98aSkJbRzTBuXpmK0tHgkrSb5DrrfW', 'jacek2'),
+(3, 'puma@gmail.com', '$2b$10$REc8nJlDwrfkqGIyVst3YuXeqVejF3de.A57JtOaXE9g25GVnX6Eq', 'd'),
+(4, 'pumaxyt@gmail.com', '$2b$10$TJHNVyIzm.vjAVpnyDRK6eYtitvKJyJ/cI5qyBF1PM7hRN.eVj8Gm', 'kk');
 
 -- --------------------------------------------------------
 
@@ -55,7 +57,7 @@ CREATE TABLE `questions` (
   `odpC` varchar(255) DEFAULT NULL,
   `odpD` varchar(255) DEFAULT NULL,
   `odpowiedz` varchar(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `questions`
@@ -112,17 +114,19 @@ INSERT INTO `questions` (`QuestionID`, `content`, `odpA`, `odpB`, `odpC`, `odpD`
 CREATE TABLE `scoreboard` (
   `id` int(11) NOT NULL,
   `id_login` int(11) NOT NULL,
-  `wynik` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `wynik` int(11) NOT NULL,
+  `czas` int(11) DEFAULT NULL,
+  `termin` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `scoreboard`
 --
 
-INSERT INTO `scoreboard` (`id`, `id_login`, `wynik`) VALUES
-(11, 1, 0),
-(12, 1, 3),
-(13, 1, 7);
+INSERT INTO `scoreboard` (`id`, `id_login`, `wynik`, `czas`, `termin`) VALUES
+(14, 4, 4, 12, '2023-04-2TASD'),
+(15, 4, 6, 12, '2024-06-08'),
+(16, 4, 1, 8, '2024-06-08');
 
 -- --------------------------------------------------------
 
@@ -134,7 +138,7 @@ CREATE TABLE `users` (
   `UserID` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `wynik` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indeksy dla zrzutów tabel
@@ -173,7 +177,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `LoginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `LoginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `questions`
@@ -185,7 +189,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `scoreboard`
 --
 ALTER TABLE `scoreboard`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`

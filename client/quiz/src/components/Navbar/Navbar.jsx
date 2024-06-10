@@ -3,11 +3,12 @@ import axios from 'axios'
 import { Link } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import config from '../../config';
 
 const Navbar = (props) => {
 
     const handleDelete=()=>{
-        axios.get('http://192.168.227.7:8082/logout')
+        axios.get(`${config.API_BASE_URL}/logout`)
         .then(res=>{
             window.location.reload();
            
