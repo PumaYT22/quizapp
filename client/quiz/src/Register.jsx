@@ -87,7 +87,7 @@ const Register = () => {
                                 <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                 <label class="form-label" htmlFor='email'>Twój Email</label>
-                                <input type="text" placeholder='Podaj Email' name='email' required
+                                <input type="email" placeholder='Podaj Email' name='email' required
                                     className='form-control rounded-0'
                                     onChange={e=>setValues({...values,email:e.target.value})}></input>
                                 
