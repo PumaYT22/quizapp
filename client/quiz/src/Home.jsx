@@ -197,7 +197,7 @@ const Home = () => {
                     </p>
                     <hr></hr>
                     <p className="card-text">
-                    Stronę przygotowali Jakub Guźda i Kamil Kurpisz z Klasy 4B jako projekt z aplikacji webowych.
+                    Stronę przygotowali Jakub Guźda i Kamil Kurpisz z Klasy 4B 2023/24 jako projekt z aplikacji webowych na lekcję.
                     </p>
                     <Link to="/login" className='btn btn-primary'>Login</Link>
                     <p className="card-text">
